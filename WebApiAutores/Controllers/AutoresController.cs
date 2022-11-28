@@ -19,7 +19,7 @@ namespace WebApiAutores.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Autor>>> Get()
         {
-            return await _context.Autores.Include(x=>x.Libros).ToListAsync();
+            return await _context.Autores.Include(x => x.Libros).ToListAsync();
         }
 
         [HttpGet("primero")]
@@ -27,18 +27,47 @@ namespace WebApiAutores.Controllers
         {
             return await _context.Autores.Include(x => x.Libros).FirstOrDefaultAsync();
         }
+        [HttpGet("details")]
+        public async Task<ActionResult<Autor>> Get(int id, string name)
+        {
+
+
+            var autor = await _context.Autores.Include(x => x.Libros).FirstOrDefaultAsync(x => x.Id == id);
+            if (autor == null)
+                 autor = await _context.Autores.Include(x => x.Libros).FirstOrDefaultAsync(x => x.Name.Contains(name));
+
+            if (autor == null)
+                return NotFound();
+
+            return Ok(autor);
+
+        }
+
+        [HttpGet("{nombre}")]
+        public async Task<ActionResult<Autor>> Get(string nombre)
+        {
+
+
+            var autor = await _context.Autores.Include(x => x.Libros).FirstOrDefaultAsync(x => x.Name.Contains(nombre));
+
+            if (autor == null)
+                return NotFound();
+
+            return Ok(autor);
+
+        }
         [HttpPost]
         public async Task<ActionResult> Post(Autor autor)
         {
 
             _context.Add(autor);
             await _context.SaveChangesAsync();
-            return Ok();     
+            return Ok();
 
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(Autor autor,int id)
+        public async Task<ActionResult> Put(Autor autor, int id)
         {
             if (autor.Id != id)
                 return BadRequest("El id del autor no incide con el id de la url");
@@ -49,9 +78,9 @@ namespace WebApiAutores.Controllers
 
             _context.Update(autor);
             await _context.SaveChangesAsync();
-            return Ok();     
-        
-        
+            return Ok();
+
+
         }
 
         [HttpDelete("{id:int}")]
@@ -62,11 +91,11 @@ namespace WebApiAutores.Controllers
             if (!existe)
                 return NotFound();
 
-            _context.Remove(new Autor() {Id = id});
+            _context.Remove(new Autor() { Id = id });
             await _context.SaveChangesAsync();
-            return Ok();     
-        
-        
+            return Ok();
+
+
         }
     }
 }
