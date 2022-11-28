@@ -27,14 +27,12 @@ namespace WebApiAutores.Controllers
         {
             return await _context.Autores.Include(x => x.Libros).FirstOrDefaultAsync();
         }
-        [HttpGet("details")]
-        public async Task<ActionResult<Autor>> Get(int id, string name)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Autor>> Get(int id)
         {
-
+ 
 
             var autor = await _context.Autores.Include(x => x.Libros).FirstOrDefaultAsync(x => x.Id == id);
-            if (autor == null)
-                 autor = await _context.Autores.Include(x => x.Libros).FirstOrDefaultAsync(x => x.Name.Contains(name));
 
             if (autor == null)
                 return NotFound();
@@ -42,6 +40,23 @@ namespace WebApiAutores.Controllers
             return Ok(autor);
 
         }
+        //En este usuo query parameters details?id=1&&name=Juan
+        [HttpGet("details")]
+        public async Task<ActionResult<Autor>> Get(int id, string name)
+        {
+
+
+            var autor = await _context.Autores.Include(x => x.Libros).FirstOrDefaultAsync(x => x.Id == id);
+            if (autor == null)
+                autor = await _context.Autores.Include(x => x.Libros).FirstOrDefaultAsync(x => x.Name.Contains(name));
+
+            if (autor == null)
+                return NotFound();
+
+            return Ok(autor);
+
+        }
+
 
         [HttpGet("{nombre}")]
         public async Task<ActionResult<Autor>> Get(string nombre)
