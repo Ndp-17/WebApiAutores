@@ -22,11 +22,19 @@ namespace WebApiAutores.Controllers
             return await _context.Autores.Include(x => x.Libros).ToListAsync();
         }
 
+        [HttpGet("listado")]
+        public  List<Autor> Listado()
+        {
+            return  _context.Autores.Include(x => x.Libros).ToList();
+        }
+
+
         [HttpGet("primero")]
         public async Task<ActionResult<Autor>> Primero()
         {
             return await _context.Autores.Include(x => x.Libros).FirstOrDefaultAsync();
         }
+
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Autor>> Get(int id)
         {
@@ -40,6 +48,7 @@ namespace WebApiAutores.Controllers
             return Ok(autor);
 
         }
+
         //En este usuo query parameters details?id=1&&name=Juan
         [HttpGet("details")]
         public async Task<ActionResult<Autor>> Get(int id, string name)
@@ -71,6 +80,7 @@ namespace WebApiAutores.Controllers
             return Ok(autor);
 
         }
+
         [HttpPost]
         public async Task<ActionResult> Post(Autor autor)
         {
