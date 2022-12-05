@@ -51,7 +51,7 @@ namespace WebApiAutores.Controllers
 
         //En este usuo query parameters details?id=1&&name=Juan
         [HttpGet("details")]
-        public async Task<ActionResult<Autor>> Get(int id, string name)
+        public async Task<ActionResult<Autor>> Get([FromHeader]int id, [FromQuery]string name)
         {
 
 
@@ -82,7 +82,7 @@ namespace WebApiAutores.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(Autor autor)
+        public async Task<ActionResult> Post([FromBody]Autor autor)
         {
 
             _context.Add(autor);
@@ -92,7 +92,7 @@ namespace WebApiAutores.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(Autor autor, int id)
+        public async Task<ActionResult> Put([FromBody]Autor autor, int id)
         {
             if (autor.Id != id)
                 return BadRequest("El id del autor no incide con el id de la url");
