@@ -92,7 +92,7 @@ namespace WebApiAutores.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put([FromBody]Autor autor, int id)
+        public async Task<ActionResult> Put([FromBody]Autor autor,[FromQuery] int id)
         {
             if (autor.Id != id)
                 return BadRequest("El id del autor no incide con el id de la url");
