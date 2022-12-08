@@ -8,7 +8,7 @@ namespace WebApiAutores.Entidades
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "El campo {0} es requerido")]
-        [StringLength(maximumLength: 5, ErrorMessage = "El campo {0} no debe de tener mas de {1} caracteres")]
+        [StringLength(maximumLength: 120, ErrorMessage = "El campo {0} no debe de tener mas de {1} caracteres")]
        // [PrimeraLetraMayuscula]
         public string Name { get; set; }
         //[Range(18, 120)]
@@ -20,10 +20,10 @@ namespace WebApiAutores.Entidades
         //[NotMapped]
         //[Url]
         //public string URL { get; set; }
-        [NotMapped]
-        public int Mayor { get; set; }
-        [NotMapped]
-        public int Menor { get; set; }
+        //[NotMapped]
+        //public int Mayor { get; set; }
+        //[NotMapped]
+        //public int Menor { get; set; }
 
         public List<Libro> Libros { get; set; }
 
@@ -36,9 +36,9 @@ namespace WebApiAutores.Entidades
                     yield return new ValidationResult("La primera letra dede ser mayuscula", new string[] { nameof(Name)});
             }
 
-            if (Menor > Mayor)
-                yield return new ValidationResult("Este valor no puede ser mas grande que el campo Mayor",
-                    new string[] { nameof(Menor) });
+            //if (Menor > Mayor)
+            //    yield return new ValidationResult("Este valor no puede ser mas grande que el campo Mayor",
+            //        new string[] { nameof(Menor) });
         }
     }
 }
