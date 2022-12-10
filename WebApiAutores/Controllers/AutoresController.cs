@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiAutores.Entidades;
+using WebApiAutores.Servicios;
 
 namespace WebApiAutores.Controllers
 {
@@ -9,10 +10,12 @@ namespace WebApiAutores.Controllers
     public class AutoresController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IServicio servicio;
 
-        public AutoresController(ApplicationDbContext context)
+        public AutoresController(ApplicationDbContext context, IServicio servicio)
         {
             _context = context;
+            this.servicio = servicio;
         }
 
 
@@ -21,11 +24,14 @@ namespace WebApiAutores.Controllers
         {
             return await _context.Autores.Include(x => x.Libros).ToListAsync();
         }
-
+        [HttpGet]
         [HttpGet("listado")]
-        public  List<Autor> Listado()
+        [HttpGet("/listado")]
+        public List<Autor> Listado()
         {
-            return  _context.Autores.Include(x => x.Libros).ToList();
+            servicio.Realizartarea();
+
+            return _context.Autores.Include(x => x.Libros).ToList();
         }
 
 
@@ -38,7 +44,7 @@ namespace WebApiAutores.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Autor>> Get(int id)
         {
- 
+
 
             var autor = await _context.Autores.Include(x => x.Libros).FirstOrDefaultAsync(x => x.Id == id);
 
@@ -51,7 +57,7 @@ namespace WebApiAutores.Controllers
 
         //En este usuo query parameters details?id=1&&name=Juan
         [HttpGet("details")]
-        public async Task<ActionResult<Autor>> Get([FromHeader]int id, [FromQuery]string name)
+        public async Task<ActionResult<Autor>> Get([FromHeader] int id, [FromQuery] string name)
         {
 
 
@@ -82,12 +88,12 @@ namespace WebApiAutores.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody]Autor autor)
+        public async Task<ActionResult> Post([FromBody] Autor autor)
         {
             var existeAutorConElMismoNombre = await _context.Autores.AnyAsync(x => x.Name == autor.Name);
 
-                if(existeAutorConElMismoNombre)
-                    return BadRequest($"Ya existe un autor con el nombre {autor.Name}");
+            if (existeAutorConElMismoNombre)
+                return BadRequest($"Ya existe un autor con el nombre {autor.Name}");
 
             _context.Add(autor);
             await _context.SaveChangesAsync();
@@ -96,7 +102,7 @@ namespace WebApiAutores.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put([FromBody]Autor autor,[FromQuery] int id)
+        public async Task<ActionResult> Put([FromBody] Autor autor, [FromQuery] int id)
         {
             if (autor.Id != id)
                 return BadRequest("El id del autor no incide con el id de la url");
