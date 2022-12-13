@@ -25,7 +25,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(
         builder.Configuration.GetConnectionString("DefaultConnection")
         )
     );
-builder.Services.AddSingleton<IServicio, ServicioA>();
+builder.Services.AddTransient<IServicio, ServicioA>();
+
+builder.Services.AddTransient<ServicioTransient>();
+builder.Services.AddScoped<ServicioScoped>();
+builder.Services.AddSingleton<ServicioSingelton>();
 
 var app = builder.Build();
 

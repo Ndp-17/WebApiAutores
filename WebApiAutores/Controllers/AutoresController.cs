@@ -11,11 +11,20 @@ namespace WebApiAutores.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IServicio servicio;
+        private readonly ServicioTransient servicioTransient;
+        private readonly ServicioScoped servicioScoped;
+        private readonly ServicioSingelton servicioSingelton;
 
-        public AutoresController(ApplicationDbContext context, IServicio servicio)
+        public AutoresController(ApplicationDbContext context, IServicio servicio
+            , ServicioTransient servicioTransient
+            , ServicioScoped servicioScoped
+            , ServicioSingelton servicioSingelton)
         {
             _context = context;
             this.servicio = servicio;
+            this.servicioTransient = servicioTransient;
+            this.servicioScoped = servicioScoped;
+            this.servicioSingelton = servicioSingelton;
         }
 
 
@@ -23,6 +32,23 @@ namespace WebApiAutores.Controllers
         public async Task<ActionResult<List<Autor>>> Get()
         {
             return await _context.Autores.Include(x => x.Libros).ToListAsync();
+        }
+        [HttpGet(" GUID")]
+        public ActionResult ObtenerGuids()
+        {
+
+            return Ok(new
+            {
+                AutoresControllerTransient  = servicioTransient.Guid,
+                ServicioA_Transient         = servicio.ObtenerTransient(),
+                /***************************************************************/
+                AutoresControllerScoped     = servicioScoped.Guid,
+                ServicioA_Scoped            = servicio.ObtenerScoped(),
+                /***************************************************************/
+                AutoresControllerSingelton = servicioSingelton.Guid,
+                ServicioA_Singelton         = servicio.ObtenerSingelton()
+
+            });
         }
         [HttpGet]
         [HttpGet("listado")]
