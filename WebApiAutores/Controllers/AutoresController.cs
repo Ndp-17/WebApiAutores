@@ -33,7 +33,7 @@ namespace WebApiAutores.Controllers
         {
             return await _context.Autores.Include(x => x.Libros).ToListAsync();
         }
-        [HttpGet(" GUID")]
+        [HttpGet("GUID")]
         public ActionResult ObtenerGuids()
         {
 
