@@ -50,7 +50,7 @@ namespace WebApiAutores.Controllers
 
             });
         }
-        [HttpGet]
+       // [HttpGet]
         [HttpGet("listado")]
         [HttpGet("/listado")]
         public List<Autor> Listado()
