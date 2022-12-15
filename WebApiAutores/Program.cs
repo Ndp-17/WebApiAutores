@@ -34,6 +34,18 @@ builder.Services.AddSingleton<ServicioSingelton>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.Map("/ruta1", app =>
+{
+
+    app.Run(async contexto =>
+                {
+                    await contexto.Response.WriteAsync("Estoy interceptando la tuberia");
+
+                }
+
+    );
+});
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

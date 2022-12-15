@@ -14,25 +14,28 @@ namespace WebApiAutores.Controllers
         private readonly ServicioTransient servicioTransient;
         private readonly ServicioScoped servicioScoped;
         private readonly ServicioSingelton servicioSingelton;
+        private readonly ILogger<AutoresController> logger;
 
         public AutoresController(ApplicationDbContext context, IServicio servicio
             , ServicioTransient servicioTransient
             , ServicioScoped servicioScoped
-            , ServicioSingelton servicioSingelton)
+            , ServicioSingelton servicioSingelton
+            , ILogger<AutoresController> logger)
         {
             _context = context;
             this.servicio = servicio;
             this.servicioTransient = servicioTransient;
             this.servicioScoped = servicioScoped;
             this.servicioSingelton = servicioSingelton;
+            this.logger = logger;
         }
 
 
-        [HttpGet]
-        public async Task<ActionResult<List<Autor>>> Get()
-        {
-            return await _context.Autores.Include(x => x.Libros).ToListAsync();
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<List<Autor>>> Get()
+        //{
+        //    return await _context.Autores.Include(x => x.Libros).ToListAsync();
+        //}
         [HttpGet("GUID")]
         public ActionResult ObtenerGuids()
         {
@@ -53,8 +56,10 @@ namespace WebApiAutores.Controllers
         [HttpGet]
         [HttpGet("listado")]
         [HttpGet("/listado")]
-        public List<Autor> Listado()
+        public async Task<ActionResult<List<Autor>>> Get()
         {
+            logger.LogInformation("Estamos obteniendo los Autores");
+            logger.LogWarning("Este es un mensaje de puebra");
             servicio.Realizartarea();
 
             return _context.Autores.Include(x => x.Libros).ToList();
