@@ -34,6 +34,32 @@ builder.Services.AddSingleton<ServicioSingelton>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+
+app.Use(async (contexto, siguiente) => {
+
+    using (var ms = new MemoryStream())
+    {
+        var cuerpooriginalrespuesta = contexto.Response.Body;
+        contexto.Response.Body = ms;
+
+        await siguiente.Invoke();
+
+        ms.Seek(0, SeekOrigin.Begin);
+        string respuesta = new StreamReader(ms).ReadToEnd();
+        ms.Seek(0, SeekOrigin.Begin);
+
+        await ms.CopyToAsync(cuerpooriginalrespuesta);
+        contexto.Response.Body = cuerpooriginalrespuesta;
+
+    }
+
+
+});
+
+
+
+
 app.Map("/ruta1", app =>
 {
 
