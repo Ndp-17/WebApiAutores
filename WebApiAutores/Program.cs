@@ -51,7 +51,7 @@ app.Use(async (contexto, siguiente) => {
 
         await ms.CopyToAsync(cuerpooriginalrespuesta);
         contexto.Response.Body = cuerpooriginalrespuesta;
-
+        app.Logger.LogInformation(respuesta);
     }
 
 
