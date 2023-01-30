@@ -34,6 +34,10 @@ builder.Services.AddSingleton<ServicioSingelton>();
 
 var app = builder.Build();
 
+#region Comentado
+
+
+
 // Configure the HTTP request pipeline.
 
 
@@ -60,7 +64,7 @@ var app = builder.Build();
 //});
 
 //app.UseMiddleware<LogRespuestaHTTPMiddleware>();
-
+#endregion
 app.UseLogRespuestaHTTP();
 
 
@@ -85,6 +89,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseResponseCaching();
 
 app.MapControllers();
 
