@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json.Serialization;
@@ -31,6 +32,10 @@ builder.Services.AddTransient<IServicio, ServicioA>();
 builder.Services.AddTransient<ServicioTransient>();
 builder.Services.AddScoped<ServicioScoped>();
 builder.Services.AddSingleton<ServicioSingelton>();
+
+builder.Services.AddResponseCaching();  
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 
 var app = builder.Build();
 
@@ -88,10 +93,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseResponseCaching();
 app.UseAuthorization();
 
-app.UseResponseCaching();
 
 app.MapControllers();
 
 app.Run();
+app.UseEndpoints(endpoints => endpoints.MapControllers());
