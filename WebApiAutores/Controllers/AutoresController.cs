@@ -3,90 +3,37 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiAutores.Entidades;
 using WebApiAutores.Filtros;
-using WebApiAutores.Servicios;
+
 
 namespace WebApiAutores.Controllers
 {
     [ApiController]
     [Route("api/autores")]
-   // [Authorize]
     public class AutoresController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly IServicio servicio;
-        private readonly ServicioTransient servicioTransient;
-        private readonly ServicioScoped servicioScoped;
-        private readonly ServicioSingelton servicioSingelton;
-        private readonly ILogger<AutoresController> logger;
 
-        public AutoresController(ApplicationDbContext context, IServicio servicio
-            , ServicioTransient servicioTransient
-            , ServicioScoped servicioScoped
-            , ServicioSingelton servicioSingelton
-            , ILogger<AutoresController> logger)
+        public AutoresController(ApplicationDbContext context)
         {
             _context = context;
-            this.servicio = servicio;
-            this.servicioTransient = servicioTransient;
-            this.servicioScoped = servicioScoped;
-            this.servicioSingelton = servicioSingelton;
-            this.logger = logger;
         }
 
 
-        //[HttpGet]
-        //public async Task<ActionResult<List<Autor>>> Get()
-        //{
-        //    return await _context.Autores.Include(x => x.Libros).ToListAsync();
-        //}
-        [HttpGet("GUID")]
-       // [ResponseCache(Duration =10)]
-        [ServiceFilter(typeof(MiFirltroDeAccion))]
-        public ActionResult ObtenerGuids()
-        {
 
-            return Ok(new
-            {
-                AutoresControllerTransient  = servicioTransient.Guid,
-                ServicioA_Transient         = servicio.ObtenerTransient(),
-                /***************************************************************/
-                AutoresControllerScoped     = servicioScoped.Guid,
-                ServicioA_Scoped            = servicio.ObtenerScoped(),
-                /***************************************************************/
-                AutoresControllerSingelton = servicioSingelton.Guid,
-                ServicioA_Singelton         = servicio.ObtenerSingelton()
-
-            });
-        }
         [HttpGet]
-        [HttpGet("listado")]
-        [HttpGet("/listado")]
-        //[ResponseCache(Duration = 10)]
-        [ServiceFilter(typeof(MiFirltroDeAccion))]
+
         public async Task<ActionResult<List<Autor>>> Get()
         {
-           // throw new NotImplementedException();
-
-            logger.LogInformation("Estamos obteniendo los Autores");
-            logger.LogWarning("Este es un mensaje de puebra");
-            servicio.Realizartarea();
-
             return _context.Autores.Include(x => x.Libros).ToList();
         }
 
-
-        [HttpGet("primero")]
-        public async Task<ActionResult<Autor>> Primero()
-        {
-            return await _context.Autores.Include(x => x.Libros).FirstOrDefaultAsync();
-        }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Autor>> Get(int id)
         {
 
 
-            var autor = await _context.Autores.Include(x => x.Libros).FirstOrDefaultAsync(x => x.Id == id);
+            var autor = await _context.Autores.FirstOrDefaultAsync(x => x.Id == id);
 
             if (autor == null)
                 return NotFound();
@@ -101,9 +48,9 @@ namespace WebApiAutores.Controllers
         {
 
 
-            var autor = await _context.Autores.Include(x => x.Libros).FirstOrDefaultAsync(x => x.Id == id);
+            var autor = await _context.Autores.FirstOrDefaultAsync(x => x.Id == id);
             if (autor == null)
-                autor = await _context.Autores.Include(x => x.Libros).FirstOrDefaultAsync(x => x.Name.Contains(name));
+                autor = await _context.Autores.FirstOrDefaultAsync(x => x.Name.Contains(name));
 
             if (autor == null)
                 return NotFound();

@@ -5,7 +5,6 @@ using System.Text.Json.Serialization;
 using WebApiAutores;
 using WebApiAutores.Filtros;
 using WebApiAutores.Middlewares;
-using WebApiAutores.Servicios;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,15 +32,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(
         builder.Configuration.GetConnectionString("DefaultConnection")
         )
     );
-builder.Services.AddTransient<IServicio, ServicioA>();
-
-builder.Services.AddTransient<ServicioTransient>();
-builder.Services.AddScoped<ServicioScoped>();
-builder.Services.AddSingleton<ServicioSingelton>();
-
-builder.Services.AddTransient<MiFirltroDeAccion>();
-
-builder.Services.AddHostedService<EscribirEnArchivo>();
 
 builder.Services.AddResponseCaching();  
 
@@ -83,17 +73,6 @@ var app = builder.Build();
 app.UseLogRespuestaHTTP();
 
 
-app.Map("/ruta1", app =>
-{
-
-    app.Run(async contexto =>
-                {
-                    await contexto.Response.WriteAsync("Estoy interceptando la tuberia");
-
-                }
-
-    );
-});
 
 if (app.Environment.IsDevelopment())
 {
@@ -103,7 +82,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseResponseCaching();
+
 app.UseAuthorization();
 
 
