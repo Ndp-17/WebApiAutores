@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json.Serialization;
 using WebApiAutores;
+using WebApiAutores.Filtros;
 using WebApiAutores.Middlewares;
 using WebApiAutores.Servicios;
 
@@ -10,7 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers().
+builder.Services.AddControllers(
+    opciones => {
+        opciones.Filters.Add(typeof(FiltroDeExcepcion));
+    }
+    
+    ).
     AddJsonOptions(x=>x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -32,6 +38,10 @@ builder.Services.AddTransient<IServicio, ServicioA>();
 builder.Services.AddTransient<ServicioTransient>();
 builder.Services.AddScoped<ServicioScoped>();
 builder.Services.AddSingleton<ServicioSingelton>();
+
+builder.Services.AddTransient<MiFirltroDeAccion>();
+
+builder.Services.AddHostedService<EscribirEnArchivo>();
 
 builder.Services.AddResponseCaching();  
 
