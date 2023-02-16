@@ -24,7 +24,7 @@ namespace WebApiAutores.Controllers
 
         public async Task<ActionResult<List<Autor>>> Get()
         {
-            return _context.Autores.Include(x => x.Libros).ToList();
+            return _context.Autores.ToList();
         }
 
 
@@ -65,7 +65,7 @@ namespace WebApiAutores.Controllers
         {
 
 
-            var autor = await _context.Autores.Include(x => x.Libros).FirstOrDefaultAsync(x => x.Name.Contains(nombre));
+            var autor = await _context.Autores.FirstOrDefaultAsync(x => x.Name.Contains(nombre));
 
             if (autor == null)
                 return NotFound();
