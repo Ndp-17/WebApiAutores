@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebApiAutores.DTOs;
 using WebApiAutores.Entidades;
 using WebApiAutores.Filtros;
 
@@ -75,12 +76,17 @@ namespace WebApiAutores.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Autor autor)
+        public async Task<ActionResult> Post([FromBody] AutorCreacionDTO autorCreacionDTO)
         {
-            var existeAutorConElMismoNombre = await _context.Autores.AnyAsync(x => x.Name == autor.Name);
+            var existeAutorConElMismoNombre = await _context.Autores.AnyAsync(x => x.Name == autorCreacionDTO.Name);
 
             if (existeAutorConElMismoNombre)
-                return BadRequest($"Ya existe un autor con el nombre {autor.Name}");
+                return BadRequest($"Ya existe un autor con el nombre {autorCreacionDTO.Name}");
+
+            var autor = new Autor()
+            {
+                Name = autorCreacionDTO.Name
+            };
 
             _context.Add(autor);
             await _context.SaveChangesAsync();

@@ -33,9 +33,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(
         )
     );
 
-builder.Services.AddResponseCaching();  
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 
