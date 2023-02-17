@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiAutores.DTOs;
@@ -13,10 +14,12 @@ namespace WebApiAutores.Controllers
     public class AutoresController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper mapper;
 
-        public AutoresController(ApplicationDbContext context)
+        public AutoresController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            this.mapper = mapper;
         }
 
 
@@ -83,10 +86,7 @@ namespace WebApiAutores.Controllers
             if (existeAutorConElMismoNombre)
                 return BadRequest($"Ya existe un autor con el nombre {autorCreacionDTO.Name}");
 
-            var autor = new Autor()
-            {
-                Name = autorCreacionDTO.Name
-            };
+            var autor = mapper.Map<Autor>(autorCreacionDTO);
 
             _context.Add(autor);
             await _context.SaveChangesAsync();
