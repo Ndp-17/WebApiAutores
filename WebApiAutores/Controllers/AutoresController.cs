@@ -26,14 +26,17 @@ namespace WebApiAutores.Controllers
 
         [HttpGet]
 
-        public async Task<ActionResult<List<Autor>>> Get()
+        public async Task<ActionResult<List<AutorDTO>>> Get()
         {
-            return _context.Autores.ToList();
+
+            var autores = await _context.Autores.ToListAsync();
+
+            return mapper.Map<List<AutorDTO>>(autores);
         }
 
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Autor>> Get(int id)
+        public async Task<ActionResult<AutorDTO>> Get(int id)
         {
 
 
@@ -42,7 +45,7 @@ namespace WebApiAutores.Controllers
             if (autor == null)
                 return NotFound();
 
-            return Ok(autor);
+            return mapper.Map<AutorDTO>(autor); ;
 
         }
 
@@ -65,16 +68,16 @@ namespace WebApiAutores.Controllers
 
 
         [HttpGet("{nombre}")]
-        public async Task<ActionResult<Autor>> Get(string nombre)
+        public async Task<ActionResult<List<AutorDTO>>> Get([FromRoute] string nombre)
         {
 
 
-            var autor = await _context.Autores.FirstOrDefaultAsync(x => x.Name.Contains(nombre));
+            var autores = await _context.Autores.Where(x => x.Name.Contains(nombre)).ToListAsync();
 
-            if (autor == null)
-                return NotFound();
+            //if (autor == null)
+            //    return NotFound();
 
-            return Ok(autor);
+            return mapper.Map<List<AutorDTO>>(autores);
 
         }
 
