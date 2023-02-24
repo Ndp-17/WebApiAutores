@@ -6,9 +6,12 @@ namespace WebApiAutores.Entidades
     public class Libro
     {
         public int Id { get; set; }
+        [Required]
         [PrimeraLetraMayuscula]
         [StringLength(maximumLength: 250, ErrorMessage = "El campo {0} no debe de tener mas de {1} caracteres")]
         public string Titulo { get; set; }
+
+        public List<Comentario> Comentarios { get; set; }
 
     }
 }
