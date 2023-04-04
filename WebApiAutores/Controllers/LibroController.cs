@@ -24,6 +24,7 @@ namespace WebApiAutores.Controllers
         public async Task<ActionResult<LibroDTO>> Get(int id)
         {
              var libro = await _context.Libros.FirstOrDefaultAsync(x => x.Id == id);
+                                //.Include(x=>x.Comentarios)
 
             if (libro == null)  
                 return NotFound(); 
@@ -31,14 +32,21 @@ namespace WebApiAutores.Controllers
             return mapper.Map<LibroDTO>(libro);
         }
         [HttpPost]
-        public async Task<ActionResult> Post(LibroCreacionDTO LibroCraacion)
+        public async Task<ActionResult> Post(LibroCreacionDTO libroCreacion)
         {
-            //var existe = await _context.Autores.AnyAsync(x => x.Id == libro.AutorId);
+            if(libroCreacion.AutoresIds.Any())
+                return BadRequest("No se puede crear un libro sin autores");
 
-            //if (!existe)
-            //    return BadRequest($"No existe el autor de Id :{libro.AutorId}");
 
-            var libro = mapper.Map<Libro>(LibroCraacion);
+            var  autoresIds = await _context.Autores.Where(at=> libroCreacion.AutoresIds.
+                                        Contains(at.Id)).Select(x=>x.Id).ToListAsync();
+            if(autoresIds.Count != libroCreacion.AutoresIds.Count) 
+            { 
+                return BadRequest("No exite uno de los autores enviados.");
+            
+            }
+
+            var libro = mapper.Map<Libro>(libroCreacion);
             _context.Add(libro);
             await _context.SaveChangesAsync();
             return Ok();
