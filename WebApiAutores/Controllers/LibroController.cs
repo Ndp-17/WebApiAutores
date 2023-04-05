@@ -23,8 +23,11 @@ namespace WebApiAutores.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<LibroDTO>> Get(int id)
         {
-            var libro = await _context.Libros.FirstOrDefaultAsync(x => x.Id == id);
+            var libro = await _context.Libros.Include(c=>c.AutoresLibros)
+                                .ThenInclude(a=>a.Autor).FirstOrDefaultAsync(x => x.Id == id);
             //.Include(x=>x.Comentarios)
+
+            libro.AutoresLibros = libro.AutoresLibros.OrderBy(x => x.Orden).ToList();
 
             if (libro == null)
                 return NotFound();
