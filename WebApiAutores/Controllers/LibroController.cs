@@ -21,7 +21,7 @@ namespace WebApiAutores.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<LibroDTO>> Get(int id)
+        public async Task<ActionResult<LibroAutoresDTO>> Get(int id)
         {
             var libro = await _context.Libros.Include(c=>c.AutoresLibros)
                                 .ThenInclude(a=>a.Autor).FirstOrDefaultAsync(x => x.Id == id);
@@ -32,7 +32,7 @@ namespace WebApiAutores.Controllers
             if (libro == null)
                 return NotFound();
 
-            return mapper.Map<LibroDTO>(libro);
+            return mapper.Map<LibroAutoresDTO>(libro);
         }
         [HttpPost]
         public async Task<ActionResult> Post(LibroCreacionDTO libroCreacion)

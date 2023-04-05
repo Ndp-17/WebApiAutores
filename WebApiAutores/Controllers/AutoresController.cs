@@ -25,7 +25,6 @@ namespace WebApiAutores.Controllers
 
 
         [HttpGet]
-
         public async Task<ActionResult<List<AutorDTO>>> Get()
         {
 
@@ -36,16 +35,19 @@ namespace WebApiAutores.Controllers
 
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<AutorDTO>> Get(int id)
+        public async Task<ActionResult<AutorLibrosDTO>> Get(int id)
         {
 
 
-            var autor = await _context.Autores.FirstOrDefaultAsync(x => x.Id == id);
+            var autor = await _context.Autores
+                .Include(c=>c.AutoresLibros)
+                .ThenInclude(d=>d.Libro)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (autor == null)
                 return NotFound();
 
-            return mapper.Map<AutorDTO>(autor); ;
+            return mapper.Map<AutorLibrosDTO>(autor); ;
 
         }
 
