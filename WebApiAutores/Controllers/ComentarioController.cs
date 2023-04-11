@@ -28,11 +28,20 @@ namespace WebApiAutores.Controllers
             }
 
             var comentarios = await _context.Comentarios.
-                Where(x=> x.LibroId==libroId).ToListAsync();
+                Where(x => x.LibroId == libroId).ToListAsync();
 
             return mapper.Map<List<ComentarioDTO>>(comentarios);
-        
-        
+
+
+        }
+
+        [HttpGet("{id:int}", Name = "obtenerComentario")]
+        public async Task<ActionResult<ComentarioDTO>> GetById(int id)
+        {
+            var comentario = await _context.Comentarios.FirstOrDefaultAsync(a => a.Id == id);
+            if (comentario == null)
+                return NotFound();
+            return mapper.Map<ComentarioDTO>(comentario);
         }
 
         [HttpPost]
@@ -45,11 +54,14 @@ namespace WebApiAutores.Controllers
             }
 
             var comentario = mapper.Map<Comentario>(comentarioCreacionDTO);
-            comentario.LibroId= libroId;
+            comentario.LibroId = libroId;
             _context.Add(comentario);
+
             await _context.SaveChangesAsync();
-            return Ok();
-        
+
+            var comentarioDTO = mapper.Map<ComentarioDTO>(comentario);
+            return CreatedAtRoute("obtenerComentario", new { id = comentario.Id, libroId }, comentarioDTO);
+
         }
 
     }
