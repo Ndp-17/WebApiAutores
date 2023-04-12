@@ -103,18 +103,23 @@ namespace WebApiAutores.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put([FromBody] Autor autor, [FromQuery] int id)
+        public async Task<ActionResult> Put([FromBody] AutorCreacionDTO autorDTO, int id)
         {
-            if (autor.Id != id)
-                return BadRequest("El id del autor no incide con el id de la url");
+            //if (autor.Id != id)
+            //    return BadRequest("El id del autor no incide con el id de la url");
             var existe = await _context.Autores.AnyAsync(x => x.Id == id);
 
             if (!existe)
                 return NotFound();
 
+            var autor = mapper.Map<Autor>(autorDTO);
+            autor.Id = id;
+
             _context.Update(autor);
             await _context.SaveChangesAsync();
-            return Ok();
+
+            //return CreatedAtRoute("obtenerAutor", new { id = autor.Id }, autorDTO);
+            return NoContent();
 
 
         }
