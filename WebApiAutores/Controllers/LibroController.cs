@@ -50,12 +50,9 @@ namespace WebApiAutores.Controllers
             }
 
             var libro = mapper.Map<Libro>(libroCreacion);
+            AsignarOrdenAutores(libro);
 
-            for (int i = 0; i < libro.AutoresLibros.Count; i++)
-            {
-                libro.AutoresLibros[i].Orden = i;
 
-            }
             _context.Add(libro);
             await _context.SaveChangesAsync();
 
@@ -63,6 +60,29 @@ namespace WebApiAutores.Controllers
 
             return CreatedAtRoute("obtenerLibro", new { id = libro.Id }, LibroDTO);
 
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> Put(int id, [FromBody] LibroCreacionDTO libroCreacionDTO)
+        { 
+            var libroDB = await _context.Libros
+                                            .Include(x=>x.AutoresLibros)
+                                            .FirstOrDefaultAsync(x=>x.Id==id);
+            if(libroDB==null)
+                return NotFound();
+            libroDB = mapper.Map(libroCreacionDTO, libroDB);
+            AsignarOrdenAutores(libroDB);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        private void AsignarOrdenAutores(Libro libro)
+        {
+            for (int i = 0; i < libro.AutoresLibros.Count; i++)
+            {
+                libro.AutoresLibros[i].Orden = i;
+
+            }
         }
     }
 }
