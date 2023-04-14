@@ -24,6 +24,7 @@ namespace WebApiAutores.Utilidades
 
             CreateMap<ComentarioCreacionDTO, Comentario>();
             CreateMap<Comentario, ComentarioDTO>();
+            CreateMap< LibroPatchDTO,Libro>().ReverseMap();
         }
         private List<AutorDTO> MapLibroDTOAutores(Libro libro, LibroDTO libroDTO)
         {
@@ -56,6 +57,7 @@ namespace WebApiAutores.Utilidades
                 resultado.Add(new LibroDTO()
                 {
                     Id= libroAutor.LibroId,
+                    FechaPublicacion= libroAutor.Libro.FechaPublicacion,
                     Titulo = libroAutor.Libro.Titulo
 
                 });
