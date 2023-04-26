@@ -15,11 +15,15 @@ namespace WebApiAutores.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper mapper;
+        private readonly IConfiguration _configuration;
 
-        public AutoresController(ApplicationDbContext context, IMapper mapper)
+
+        public AutoresController(ApplicationDbContext context, IMapper mapper,IConfiguration configuration )
         {
             _context = context;
             this.mapper = mapper;
+            _configuration = configuration;
+
         }
 
 
@@ -122,6 +126,15 @@ namespace WebApiAutores.Controllers
             return NoContent();
 
 
+        }
+
+        [HttpGet("Configuraciones")]
+        public ActionResult<string> Obtenerconfiguracion()
+        {
+            //return _configuration["apellido"];
+            return _configuration["apellido"];
+        
+        
         }
 
         [HttpDelete("{id:int}")]
