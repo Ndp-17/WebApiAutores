@@ -130,14 +130,14 @@ namespace WebApiAutores.Controllers
 
         }
 
-        [HttpGet("Configuraciones")]
-        public ActionResult<string> Obtenerconfiguracion()
-        {
-            //return _configuration["apellido"];
-            return _configuration["apellido"];
+        //[HttpGet("Configuraciones")]
+        //public ActionResult<string> Obtenerconfiguracion()
+        //{
+        //    //return _configuration["apellido"];
+        //    return _configuration["apellido"];
         
         
-        }
+        //}
 
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
