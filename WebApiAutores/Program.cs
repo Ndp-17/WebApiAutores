@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.OpenApi.Models;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using System.Text.Json.Serialization;
 using WebApiAutores;
 using WebApiAutores.Filtros;
@@ -12,20 +15,46 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers(
-    opciones => {
+    opciones =>
+    {
         opciones.Filters.Add(typeof(FiltroDeExcepcion));
     }
-    
+
     ).
-    AddJsonOptions(x=>x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles).AddNewtonsoftJson();
+    AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles).AddNewtonsoftJson();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+ConfigurationManager configuration = builder.Configuration;
+builder.Services.AddSwaggerGen(c =>
+{
+    //c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+    //c.IgnoreObsoleteActions();
+    //c.IgnoreObsoleteProperties();
+    //c.CustomSchemaIds(type => type.FullName);
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIAutores", Version = "v1" });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header
+    });
 
-builder.Services.AddSwaggerGen(c => {
-    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
-    c.IgnoreObsoleteActions();
-    c.IgnoreObsoleteProperties();
-    c.CustomSchemaIds(type => type.FullName);
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                
+                }
+            },
+            new string[]{ }
+        }       
+    });
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(
@@ -35,7 +64,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     );
 
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(c => c.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["llavejwt"])),
+        ClockSkew = TimeSpan.Zero
+    });
 
 builder.Services.AddAutoMapper(typeof(Program));
 
