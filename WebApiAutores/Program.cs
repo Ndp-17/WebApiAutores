@@ -9,6 +9,7 @@ using System.Text.Json.Serialization;
 using WebApiAutores;
 using WebApiAutores.Filtros;
 using WebApiAutores.Middlewares;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,7 @@ builder.Services.AddControllers(
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 ConfigurationManager configuration = builder.Configuration;
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 builder.Services.AddSwaggerGen(c =>
 {
     //c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
