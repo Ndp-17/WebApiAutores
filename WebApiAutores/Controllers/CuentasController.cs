@@ -65,9 +65,8 @@ namespace WebApiAutores.Controllers
         {
             var claims = new List<Claim>()
             {
-                new Claim("email",credencialesUsuario.Email),
-                new Claim("Niels","Niels")
-
+                new Claim("email",credencialesUsuario.Email)
+             
             };
 
             var llave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["llavejwt"]));
