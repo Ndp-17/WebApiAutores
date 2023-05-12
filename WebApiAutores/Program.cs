@@ -51,11 +51,11 @@ builder.Services.AddSwaggerGen(c =>
                 {
                     Type=ReferenceType.SecurityScheme,
                     Id="Bearer"
-                
+
                 }
             },
             new string[]{ }
-        }       
+        }
     });
 });
 
@@ -82,6 +82,11 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddAuthorization(opciones =>
+{
+    opciones.AddPolicy("EsAdmin", politica => politica.RequireClaim("esAdmin"));
+});
 
 var app = builder.Build();
 
@@ -127,7 +132,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseRouting();
 
 app.UseAuthorization();
 
