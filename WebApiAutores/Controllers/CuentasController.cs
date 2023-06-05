@@ -35,6 +35,7 @@ namespace WebApiAutores.Controllers
         public ActionResult Encriptar()
         {
 
+
             var textoPlano = "Niels De los Santos";
 
             var textoCrifrado = dataProtector.Protect(textoPlano);
@@ -52,6 +53,30 @@ namespace WebApiAutores.Controllers
 
         }
 
+        [HttpGet("encriptarPorTiempo")]
+        public ActionResult EncriptarPorTimepo()
+        {
+
+            var protectorLimitadoPorTiempo = dataProtector.ToTimeLimitedDataProtector();
+
+            var textoPlano = "Niels De los Santos";
+
+            var textoCrifrado = protectorLimitadoPorTiempo.Protect(textoPlano, lifetime: TimeSpan.FromSeconds(5));
+
+            Thread.Sleep(6000);
+
+            var textoDesencriptado = protectorLimitadoPorTiempo.Unprotect(textoCrifrado);
+
+            return Ok(new
+            {
+                textoPlano = textoPlano,
+                textoCrifrado = textoCrifrado,
+                textoDesencriptado = textoDesencriptado
+
+            });
+
+
+        }
 
 
         [HttpPost("registrar")]
