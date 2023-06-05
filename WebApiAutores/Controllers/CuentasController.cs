@@ -35,6 +35,7 @@ namespace WebApiAutores.Controllers
         public ActionResult Encriptar()
         {
 
+
             var textoPlano = "Niels De los Santos";
 
             var textoCrifrado = dataProtector.Protect(textoPlano);
