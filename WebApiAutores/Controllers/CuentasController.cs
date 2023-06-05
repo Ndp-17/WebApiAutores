@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -17,12 +19,36 @@ namespace WebApiAutores.Controllers
         private readonly UserManager<IdentityUser> userManager;
         private readonly IConfiguration configuration;
         private readonly SignInManager<IdentityUser> signInManager;
+        private readonly IDataProtector dataProtector;
+
         public CuentasController(UserManager<IdentityUser> userManager, IConfiguration configuration,
-                                 SignInManager<IdentityUser> signInManager)
+                                 SignInManager<IdentityUser> signInManager, IDataProtectionProvider dataProtectionProvider)
         {
             this.userManager = userManager;
             this.configuration = configuration;
             this.signInManager = signInManager;
+            dataProtector = dataProtectionProvider.CreateProtector("valor_unico_y_quizas_secreto");
+
+        }
+
+        [HttpGet("encriptar")]
+        public ActionResult Encriptar()
+        {
+
+            var textoPlano = "Niels De los Santos";
+
+            var textoCrifrado = dataProtector.Protect(textoPlano);
+
+            var textoDesencriptado = dataProtector.Unprotect(textoCrifrado);
+
+            return Ok(new
+            {
+                textoPlano= textoPlano,
+                textoCrifrado = textoCrifrado,
+                textoDesencriptado = textoDesencriptado
+
+            });
+
 
         }
 
@@ -115,18 +141,18 @@ namespace WebApiAutores.Controllers
         public async Task<ActionResult> HacerAdmin(EditarAdminDTO editarAdminDTO)
         {
             var usuario = await userManager.FindByEmailAsync(editarAdminDTO.Email);
-            await userManager.AddClaimAsync(usuario, new Claim("esAdmin","1"));
+            await userManager.AddClaimAsync(usuario, new Claim("esAdmin", "1"));
             return NoContent();
-        
+
         }
 
         [HttpPost("RemoverAdmin")]
         public async Task<ActionResult> RemoverAdmin(EditarAdminDTO editarAdminDTO)
         {
             var usuario = await userManager.FindByEmailAsync(editarAdminDTO.Email);
-            await userManager.RemoveClaimAsync(usuario, new Claim("esAdmin","1"));
+            await userManager.RemoveClaimAsync(usuario, new Claim("esAdmin", "1"));
             return NoContent();
-        
+
         }
     }
 }

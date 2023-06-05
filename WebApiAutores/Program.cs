@@ -88,6 +88,16 @@ builder.Services.AddAuthorization(opciones =>
     opciones.AddPolicy("EsAdmin", politica => politica.RequireClaim("esAdmin"));
 });
 
+builder.Services.AddDataProtection();
+
+builder.Services.AddCors(opciones =>
+{
+    opciones.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("https://apirequest.io").AllowAnyMethod().AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 #region Comentado
@@ -136,6 +146,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.UseCors();
 
 app.MapControllers();
 
