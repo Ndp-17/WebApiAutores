@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using WebApiAutores.DTOs;
+using WebApiAutores.Servicios;
 
 namespace WebApiAutores.Controllers
 {
@@ -19,14 +20,16 @@ namespace WebApiAutores.Controllers
         private readonly UserManager<IdentityUser> userManager;
         private readonly IConfiguration configuration;
         private readonly SignInManager<IdentityUser> signInManager;
+        private readonly HashService hashService;
         private readonly IDataProtector dataProtector;
 
         public CuentasController(UserManager<IdentityUser> userManager, IConfiguration configuration,
-                                 SignInManager<IdentityUser> signInManager, IDataProtectionProvider dataProtectionProvider)
+                                 SignInManager<IdentityUser> signInManager, IDataProtectionProvider dataProtectionProvider, HashService hashService)
         {
             this.userManager = userManager;
             this.configuration = configuration;
             this.signInManager = signInManager;
+            this.hashService = hashService;
             dataProtector = dataProtectionProvider.CreateProtector("valor_unico_y_quizas_secreto");
 
         }
@@ -76,6 +79,16 @@ namespace WebApiAutores.Controllers
             });
 
 
+        }
+
+        [HttpGet("hash/{textoPlano}")]
+        public ActionResult RealizarHash(string textoPlano)
+        {
+            var resultado_1 = hashService.Hash(textoPlano);
+            var resultado_2 = hashService.Hash(textoPlano);
+
+
+            return Ok(new { textoPlano, resultado_1, resultado_2 });
         }
 
 

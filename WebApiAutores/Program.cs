@@ -10,6 +10,7 @@ using WebApiAutores;
 using WebApiAutores.Filtros;
 using WebApiAutores.Middlewares;
 using System.IdentityModel.Tokens.Jwt;
+using WebApiAutores.Servicios;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,6 +66,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(
         )
     );
 
+
+builder.Services.AddTransient<HashService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(c => c.TokenValidationParameters = new TokenValidationParameters
