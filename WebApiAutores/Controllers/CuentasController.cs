@@ -88,7 +88,7 @@ namespace WebApiAutores.Controllers
             var resultado_2 = hashService.Hash(textoPlano);
 
 
-            return Ok(new { textoPlano, resultado_1, resultado_2 });
+            return Ok(new { textoPlano, Hash_1= resultado_1, Hash_2 = resultado_2 });
         }
 
 

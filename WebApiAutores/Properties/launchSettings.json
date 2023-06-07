@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "WebApiAutores": {
+    "WebApiAutores-Pruebalocal": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
