@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "WebApiAutores": {
+    "WebApiAutores-Pruebalocal": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
@@ -17,6 +17,18 @@
       "applicationUrl": "https://localhost:7194;http://localhost:5166",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
+      
+      }
+    },
+    "Produccion": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:7194;http://localhost:5166",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": ""
+      
       }
     },
     "IIS Express": {
