@@ -11,6 +11,7 @@ using WebApiAutores.Filtros;
 using WebApiAutores.Middlewares;
 using System.IdentityModel.Tokens.Jwt;
 using WebApiAutores.Servicios;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -137,12 +138,22 @@ var app = builder.Build();
 app.UseLogRespuestaHTTP();
 
 
-
-//if (app.Environment.IsDevelopment())
+app.UseSwagger();
+//if (app.Environment.IsProduction())
 //{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+//    //app.UseSwaggerUI(options => options.ConfigObject.Urls = new[] { new UrlDescriptor { Name = $"WebAPIAutores v1", Url = "rest-api-autores/v1/swagger.json" } });
+//    app.UseSwagger(option =>
+//    {
+//        option.RouteTemplate = "rest-api-autores/{documentName}/swagger.json";
+//    });
+//    app.UseSwaggerUI(options =>
+//    {
+//        options.SwaggerEndpoint("/rest-api-autores/v1/swagger.json", "WebAPIAutores v1");
+//        options.RoutePrefix = "rest-api-autores";
+//    });
 //}
+//else
+    app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 app.UseRouting();
