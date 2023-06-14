@@ -18,7 +18,7 @@
  - Authenticated method test 
      - ![4](https://github.com/Ndp-17/WebApiAutores/assets/68388837/d83e205d-e7d6-43bb-be52-082ea7aeb019)
         
-    - Response
+ - Response
       - ![5](https://github.com/Ndp-17/WebApiAutores/assets/68388837/7efef929-f9ac-4a1f-b173-70f539823e11)
 
  
