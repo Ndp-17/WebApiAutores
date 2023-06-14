@@ -2,25 +2,25 @@
 
 - https://nidp17.bsite.net/swagger/index.html
 
-  - ![image](https://github.com/Ndp-17/WebApiAutores/assets/68388837/3239ba5c-7d34-4477-9926-b3761d8e1f6e)
+  - ![1](https://github.com/Ndp-17/WebApiAutores/assets/68388837/9aab5aa4-e888-41a9-b72c-67c3267ae5b4)
+
   - User:test@test.com
   - Passwork:Aa1234789!
 
 - Response
 
-  - ![image](https://github.com/Ndp-17/WebApiAutores/assets/68388837/6e175e7c-2dea-426b-9d98-f6014ea845d0)
+  - ![2](https://github.com/Ndp-17/WebApiAutores/assets/68388837/824c896b-83c6-42a3-9509-684e7581e1c8)
 
 - Authorize
 
-  - ![image](https://github.com/Ndp-17/WebApiAutores/assets/68388837/64a65df2-7d27-493a-87ff-bb5040cf62d4)
+  - ![3](https://github.com/Ndp-17/WebApiAutores/assets/68388837/c672979b-d9a2-47e7-8360-69c64f74875d)
 
- - Authenticated method test
- 
-    - ![image](https://github.com/Ndp-17/WebApiAutores/assets/68388837/bf14431a-3025-4aed-a0f5-9223c5c34a05)
-
+ - Authenticated method test 
+     - ![4](https://github.com/Ndp-17/WebApiAutores/assets/68388837/d83e205d-e7d6-43bb-be52-082ea7aeb019)
+        
     - Response
-    
-      - ![image](https://github.com/Ndp-17/WebApiAutores/assets/68388837/069b5f9e-e4e9-4ebf-abf1-116a8d1f5b9c)
+      - ![5](https://github.com/Ndp-17/WebApiAutores/assets/68388837/7efef929-f9ac-4a1f-b173-70f539823e11)
+
  
  
 
