@@ -30,7 +30,7 @@ namespace WebApiAutores.Controllers
 
 
 
-        [HttpGet]
+        [HttpGet(Name = "obtenerAutores")]
         [AllowAnonymous]
         public async Task<ActionResult<List<AutorDTO>>> Get()
         {
